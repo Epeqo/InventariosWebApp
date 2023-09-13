@@ -1,6 +1,5 @@
-from flask_sqlalchemy import SQLAlchemy
+from . import db
 
-db = SQLAlchemy()
 
 class Producto(db.Model):
     id = db.Column(db.Integer, primary_key=True)

@@ -39,7 +39,6 @@
     </Compile>
     <Compile Include="runserver.py" />
     <Compile Include="InventariosWebApp\__init__.py" />
-    <Compile Include="InventariosWebApp\views.py" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="InventariosWebApp\" />
@@ -50,6 +49,7 @@
     <Folder Include="InventariosWebApp\templates\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="InventariosWebApp\templates\base.html" />
     <Content Include="requirements.txt" />
     <Content Include="InventariosWebApp\static\content\bootstrap.css" />
     <Content Include="InventariosWebApp\static\content\bootstrap.min.css" />
