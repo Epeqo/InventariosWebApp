@@ -9,6 +9,15 @@ class Producto(db.Model):
     cantidad = db.Column(db.Integer, nullable=False)
     cve_art = db.Column(db.String(100), unique=True, nullable=False)
 
+    def serialize(self):
+        return {
+            'lote': self.lote,
+            'nombre': self.nombre,
+            'caducidad': self.caducidad,
+            'cantidad': self.cantidad,
+            'cve_art': self.cve_art
+        }
+
     def __repr__(self):
         return f"<Producto {self.nombre}>"
 

@@ -156,5 +156,38 @@
         overflow-y: auto;
     }
 </style>
+
+<script>
+    document.getElementById("nextBtn").addEventListener("click", function () {
+        const loteValue = document.getElementById("dataInput").value;
+
+        fetch('/buscar-lote', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                lote: loteValue
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.existe) {
+                    // Agrega el producto a la tabla.
+                    const tableBody = document.querySelector("#productosTable tbody");
+                    const newRow = tableBody.insertRow();
+                    newRow.insertCell(0).innerText = data.lote;
+                    newRow.insertCell(1).innerText = data.nombre;
+                    newRow.insertCell(2).innerText = data.caducidad;
+                    newRow.insertCell(3).innerText = data.cantidad;
+                    newRow.insertCell(4).innerText = data.cve_art;
+                } else {
+                    alert("Producto no encontrado. Por favor, ingrese la información.");
+                    // Aquí puedes mostrar un modal o un formulario para que el usuario ingrese la información del producto.
+                }
+            });
+    });
+</script>
+
 {% endblock %}
 
