@@ -1,8 +1,9 @@
-from flask import render_template
-from InventariosWebApp import app, db
-from .models import Producto
+from flask import Blueprint, render_template
+from .models import db, Producto
 
-@app.route('/')
+main = Blueprint('main', __name__)
+
+@main.route('/')
 def index():
     productos = Producto.query.all()
     return render_template('index.html', productos=productos)

@@ -7,21 +7,49 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>Código</th>
-            <th>Nombre</th>
-            <th>Precio</th>
+            <th>Lote</th>
+            <th>Descripcion</th>
+            <th>Caducidad</th>
             <th>Cantidad</th>
-            <th>Descripción</th>
+            <th>Clave</th>
         </tr>
     </thead>
     <tbody>
         {% for producto in productos %}
         <tr>
-            <td>{{ producto.codigo }}</td>
+            <td>{{ producto.lote }}</td>
             <td>{{ producto.nombre }}</td>
-            <td>{{ producto.precio }}</td>
+            <td>{{ producto.caducidad }}</td>
             <td>{{ producto.cantidad }}</td>
-            <td>{{ producto.descripcion }}</td>
+            <td>{{ producto.cve_art }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
+{% block content2 %}
+<h1>Facturas</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>No. Factura</th>
+            <th>Marca</th>
+            <th>Descripcion</th>
+            <th>Lote</th>
+            <th>Cantidad</th>
+            <th>Fecha</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for factura in facturas %}
+        <tr>
+            <td>{{ factura.no_factura }}</td>
+            <td>{{ factura.marca }}</td>
+            <td>{{ factura.descripcion }}</td>
+            <td>{{ factura.lote }}</td>
+            <td>{{ factura.cant }}</td>
+            <td>{{ factura.fecha_emision }}</td>
         </tr>
         {% endfor %}
     </tbody>
