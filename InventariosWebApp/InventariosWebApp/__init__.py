@@ -1,16 +1,11 @@
-"""
-The flask application package.
-"""
-
 from flask import Flask
-app = Flask(__name__)
-
-import InventariosWebApp.views
-
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///Inventarios.db'
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///inventarios.db'  # Usando SQLite para el ejemplo
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 
 

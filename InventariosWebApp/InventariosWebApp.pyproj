@@ -34,6 +34,9 @@
     <Compile Include="InventariosWebApp\init_db.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="InventariosWebApp\main.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="runserver.py" />
     <Compile Include="InventariosWebApp\__init__.py" />
     <Compile Include="InventariosWebApp\views.py" />
