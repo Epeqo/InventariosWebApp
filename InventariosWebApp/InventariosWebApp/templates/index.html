@@ -1,10 +1,19 @@
 {% extends "base.html" %}
 
-{% block title %}Lista de Productos{% endblock %}
+{% block title %}Movimientos de Inventario{% endblock %}
 
 {% block content %}
+<!-- Seleccion de Tipo de Movimiento -->
+<select id="movementType">
+    <option value="ENTRADA">ENTRADA</option>
+    <option value="SALIDA">SALIDA</option>
+    <option value="TRASPASO">TRASPASO</option>
+    <option value="INVENTARIO">INVENTARIO</option>
+</select>
+
+<!-- Tabla de Productos -->
 <h1>Productos</h1>
-<table class="table table-striped">
+<table class="table table-striped" id="productosTable">
     <thead>
         <tr>
             <th>Lote</th>
@@ -26,33 +35,126 @@
         {% endfor %}
     </tbody>
 </table>
-{% endblock %}
 
-{% block content2 %}
-<h1>Facturas</h1>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>No. Factura</th>
-            <th>Marca</th>
-            <th>Descripcion</th>
-            <th>Lote</th>
-            <th>Cantidad</th>
-            <th>Fecha</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for factura in facturas %}
-        <tr>
-            <td>{{ factura.no_factura }}</td>
-            <td>{{ factura.marca }}</td>
-            <td>{{ factura.descripcion }}</td>
-            <td>{{ factura.lote }}</td>
-            <td>{{ factura.cant }}</td>
-            <td>{{ factura.fecha_emision }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<!-- Tabla vacia de Productos -->
+<div class="scrollable-table">
+    <table class="table table-striped">
+        <tbody>
+            {% for _ in range(8) %}
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Tabla de Facturas (solo visible si el movimiento es SALIDA) -->
+<div id="facturasDiv" style="display: none;">
+    <h1>Facturas <button id="loadFacturasBtn" class="small-btn">Cargar Facturas</button></h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>No. Factura</th>
+                <th>Marca</th>
+                <th>Descripcion</th>
+                <th>Lote</th>
+                <th>Cantidad</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for factura in facturas %}
+            <tr>
+                <td>{{ factura.no_factura }}</td>
+                <td>{{ factura.marca }}</td>
+                <td>{{ factura.descripcion }}</td>
+                <td>{{ factura.lote }}</td>
+                <td>{{ factura.cant }}</td>
+                <td>{{ factura.fecha_emision }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Tabla vacia de Facturas -->
+    <div class="scrollable-table">
+        <table class="table table-striped">
+            <tbody>
+                {% for _ in range(8) %}
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Campo de Texto y Botones -->
+<input type="text" id="dataInput" placeholder="Ingresa datos aqui">
+<button id="nextBtn">Siguiente</button>
+<button id="deleteBtn">Eliminar</button>
+<button id="finishBtn">Finalizar</button>
+
+<!-- Botones de Control -->
+<div class="control-buttons">
+    <button id="resetBtn">Reiniciar</button>
+    <button id="exitBtn">Salir</button>
+</div>
+
+<!-- JavaScript para mostrar/ocultar tablas -->
+<script>
+    // Funcion para mostrar/ocultar la tabla de facturas segun la seleccion
+    function toggleFacturasTable() {
+        const selectedValue = document.getElementById("movementType").value;
+        if (selectedValue === "SALIDA") {
+            document.getElementById("facturasDiv").style.display = "block";
+        } else {
+            document.getElementById("facturasDiv").style.display = "none";
+        }
+
+        // Selecciona el campo de texto cada vez que cambia la seleccion
+        document.getElementById("dataInput").focus();
+    }
+
+    // Llama a la funcion al cambiar la seleccion
+    document.getElementById("movementType").addEventListener("change", toggleFacturasTable);
+
+    // Llama a la funcion al cargar la pagina para establecer el estado inicial
+    toggleFacturasTable();
+
+    // Evento para detectar la tecla ENTER en el campo de texto
+    document.getElementById("dataInput").addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault();  // Evita la accion predeterminada del ENTER
+            document.getElementById("nextBtn").click();  // Simula un clic en el boton "Siguiente"
+        }
+    });
+</script>
+
+
+<style>
+    .small-btn {
+        padding: 5px 10px;
+        font-size: 0.875rem;
+        line-height: 1.5;
+        border-radius: 0.2rem;
+    }
+
+    .scrollable-table {
+        max-height: 320px; /* Aproximadamente 8 renglones */
+        overflow-y: auto;
+    }
+</style>
 {% endblock %}
 
