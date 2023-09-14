@@ -12,19 +12,19 @@ def create_app():
     # Configurar la base de datos
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///inventarios.db'
     
-    # Inicializar SQLAlchemy con la aplicación Flask
+    # Inicializar SQLAlchemy con la aplicacion Flask
     db.init_app(app)
 
     # Inicializar Flask-Migrate
     migrate = Migrate(app, db)
     
     # Registrar rutas
-    from . import main  # Asegúrate de que main.py esté en el mismo directorio que __init__.py
+    from . import main  # Asegurate de que main.py este en el mismo directorio que __init__.py
 
-    # Retornar la instancia de la aplicación
+    # Retornar la instancia de la aplicacion
     return app
 
-# Si necesitas una instancia global de la aplicación (por ejemplo, para un script de ejecución), puedes descomentar la siguiente línea:
+# Si necesitas una instancia global de la aplicacion (por ejemplo, para un script de ejecucion), puedes descomentar la siguiente linea:
 app = create_app()
 
 from .main import main as main_blueprint

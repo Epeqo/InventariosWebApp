@@ -1,9 +1,24 @@
 from flask import Blueprint, render_template, request, jsonify
 from .models import db, Producto, Factura
 import boto3
+import pandas as pd
+from io import BytesIO
 
-# Crea un cliente para Secrets Manager
+s3_client = boto3.client('s3', region_name='us-east-1')
 client = boto3.client('secretsmanager', region_name='us-east-1')
+
+
+def get_excel_from_s3():
+    bucket_name = 'inventariosqro'
+    file_path = 'inventario.xlsx'
+    
+    obj = s3_client.get_object(Bucket=bucket_name, Key=file_path)
+    data = obj['Body'].read()
+
+    # Usar pandas para leer el archivo Excel
+    df = pd.read_excel(BytesIO(data))
+    
+    return df
 
 def get_secret(secret_name):
     try:
@@ -17,6 +32,7 @@ def get_secret(secret_name):
         print(f"Error al obtener el secreto: {e}")
         return None
 
+s3_client = boto3.client('s3', region_name='us-east-1')
 
 main = Blueprint('main', __name__)
 
