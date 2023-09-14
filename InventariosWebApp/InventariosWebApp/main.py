@@ -57,24 +57,50 @@ def index():
 
 @main.route('/buscar-lote', methods=['POST'])
 def buscar_lote():
-    lote_ingresado = request.form.get('lote')
-    base_df, _ = obtener_excel_desde_s3()
+    try:
+        lote_ingresado = request.form.get('lote')
+        if not isinstance(lote_ingresado, str):
+            lote_ingresado = str(lote_ingresado)
 
-    # Imprimir las primeras 5 filas de la hoja "BASE" para verificar su contenido
-    print(base_df.head())
+        print("Lote ingresado:", lote_ingresado)  # Registro de depuracion
 
-    # Buscar el lote en la hoja "BASE"
-    producto = base_df[base_df['LOTE'] == lote_ingresado]
+        base_df, _ = obtener_excel_desde_s3()
 
-    # Imprimir el resultado de la busqueda
-    print(producto)
+        # Verificar si base_df se cargo correctamente
+        print("Primeras filas de base_df:", base_df.head())  # Registro de depuracion
 
-    if not producto.empty:
-        # Si se encontro el producto, agregarlo a la base de datos y redirigir a la pagina principal
-        return redirect(url_for('index'))
-    else:
-        flash('Lote no encontrado', 'danger')
-        return redirect(url_for('index'))
+        # Convertir la columna LOTE a cadena si no lo es
+        base_df['LOTE'] = base_df['LOTE'].astype(str)
+
+        # Buscar el lote en la hoja "BASE"
+        producto = base_df[base_df['LOTE'] == lote_ingresado]
+
+        # Imprimir el resultado de la busqueda
+        print("Resultado de la busqueda:", producto)  # Registro de depuracion
+
+        if not producto.empty:
+            # Si se encontro el producto, agregarlo a la base de datos
+            # ... (tu codigo para agregar el producto a la base de datos)
+            return redirect(url_for('main.index'))
+        else:
+            flash('Lote no encontrado', 'danger')
+            return redirect(url_for('main.index'))
+
+    except Exception as e:
+        # En caso de error, imprimir el error y enviar una respuesta con detalles del error
+        print("Error al buscar el lote:", str(e))
+        flash('Error al buscar el lote: ' + str(e), 'danger')
+        return redirect(url_for('main.index'))
+
+
+    except Exception as e:
+        # En caso de error, imprimir el error y enviar una respuesta con detalles del error
+        print("Error al buscar el lote:", str(e))
+        flash('Error al buscar el lote: ' + str(e), 'danger')
+        return redirect(url_for('main.index'))
+
+
+
 
 @main.route('/agregar-producto', methods=['POST'])
 def agregar_producto():
