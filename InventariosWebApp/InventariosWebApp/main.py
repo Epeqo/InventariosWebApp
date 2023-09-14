@@ -7,18 +7,17 @@ from io import BytesIO
 s3_client = boto3.client('s3', region_name='us-east-1')
 client = boto3.client('secretsmanager', region_name='us-east-1')
 
-
 def get_excel_from_s3():
-    bucket_name = 'inventariosqro'
-    file_path = 'inventario.xlsx'
-    
-    obj = s3_client.get_object(Bucket=bucket_name, Key=file_path)
+    s3 = boto3.client('s3', aws_access_key_id=AWS_ACCESS_KEY, aws_secret_access_key=AWS_SECRET_KEY)
+    obj = s3.get_object(Bucket=BUCKET_NAME, Key=FILE_NAME)
     data = obj['Body'].read()
 
-    # Usar pandas para leer el archivo Excel
-    df = pd.read_excel(BytesIO(data))
-    
-    return df
+    # Leer las hojas "BASE" y "FACTURAS"
+    base_df = pd.read_excel(BytesIO(data), sheet_name="BASE")
+    facturas_df = pd.read_excel(BytesIO(data), sheet_name="FACTURAS")
+
+    return base_df, facturas_df
+
 
 def get_secret(secret_name):
     try:
@@ -34,7 +33,21 @@ def get_secret(secret_name):
 
 s3_client = boto3.client('s3', region_name='us-east-1')
 
+
+
+
 main = Blueprint('main', __name__)
+
+@app.route('/test-s3', methods=['GET'])
+def test_s3():
+    base_df, facturas_df = get_excel_from_s3()
+    return jsonify({
+        "BASE_columns": list(base_df.columns),
+        "BASE_shape": base_df.shape,
+        "FACTURAS_columns": list(facturas_df.columns),
+        "FACTURAS_shape": facturas_df.shape
+    })
+
 
 @main.route('/')
 def index():
@@ -89,6 +102,7 @@ def verificar_factura():
             return jsonify({'coincide': True, 'cantidad_correcta': False}), 200
     else:
         return jsonify({'coincide': False}), 404
+
 
 
 

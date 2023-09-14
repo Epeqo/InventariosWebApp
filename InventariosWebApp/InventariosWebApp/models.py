@@ -1,10 +1,9 @@
 from . import db
 
-
 class Producto(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     lote = db.Column(db.String(100), nullable=False)
-    nombre = db.Column(db.String(255), nullable=False)  # Asumo que esto es "PRODUCTOS"
+    nombre = db.Column(db.String(255), nullable=False)
     caducidad = db.Column(db.Date, nullable=False)
     cantidad = db.Column(db.Integer, nullable=False)
     cve_art = db.Column(db.String(100), unique=True, nullable=False)
@@ -21,7 +20,6 @@ class Producto(db.Model):
     def __repr__(self):
         return f"<Producto {self.nombre}>"
 
-
 class Factura(db.Model):
     __tablename__ = 'factura'
     __table_args__ = {'extend_existing': True}
@@ -35,5 +33,6 @@ class Factura(db.Model):
 
     def __repr__(self):
         return f"<Factura {self.no_factura}>"
+
 
 
